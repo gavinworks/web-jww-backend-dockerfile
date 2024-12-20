@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1.4
-FROM directus/directus:11.3.1
+FROM directus/directus:11.3.5
 USER root
 RUN corepack enable \
 && corepack prepare pnpm@8.7.6 --activate \
