@@ -84,36 +84,39 @@
 			<div class="title">New Viewing Request</div>
 
 			<div class="message">
-				<p>Hello, a new viewing request has been received:</p>
+        <p>Hello, a new viewing request has been received:</p>
 
-				<div style="background-color: #f6f6f6; padding: 20px; border-radius: 6px; margin: 20px 0;">
-					<h2 style="margin-top: 0;">Contact Details</h2>
-					<ul style="list-style: none; padding: 0; margin: 0;">
-						<li style="margin-bottom: 10px;"><strong>Name:</strong> {{ viewing.payload.name }}</li>
-						<li style="margin-bottom: 10px;"><strong>Email:</strong> {{ viewing.payload.email }}</li>
-						<li style="margin-bottom: 10px;"><strong>Mobile:</strong> {{ viewing.payload.mobile }}</li>
-						{% if viewing.payload.landline %}
-						<li style="margin-bottom: 10px;"><strong>Landline:</strong> {{ viewing.payload.landline }}</li>
-						{% endif %}
-					</ul>
+        <div style="background-color: #f6f6f6; padding: 20px; border-radius: 6px; margin: 20px 0;">
+            <h2 style="margin-top: 0;">Contact Details</h2>
+            <ul style="list-style: none; padding: 0; margin: 0;">
+                <li style="margin-bottom: 10px;"><strong>Name:</strong> {{ viewing.name }}</li>
+                <li style="margin-bottom: 10px;"><strong>Email:</strong> {{ viewing.email }}</li>
+                <li style="margin-bottom: 10px;"><strong>Mobile:</strong> {{ viewing.mobile }}</li>
+                {% if viewing.landline %}
+                <li style="margin-bottom: 10px;"><strong>Landline:</strong> {{ viewing.landline }}</li>
+                {% endif %}
+            </ul>
 
-					<h2>Property Address</h2>
-					<p style="margin-bottom: 5px;">{{ viewing.payload.add1 }}</p>
-					{% if viewing.payload.add2 %}<p style="margin-bottom: 5px;">{{ viewing.payload.add2 }}</p>{% endif %}
-					<p style="margin-bottom: 5px;">{{ viewing.payload.city }}</p>
-					<p style="margin-bottom: 5px;">{{ viewing.payload.county }}</p>
-					<p style="margin-bottom: 5px;">{{ viewing.payload.postcode }}</p>
+            <h2>Property Address</h2>
+            <p style="margin-bottom: 5px;">{{ viewing.add1 }}</p>
+            {% if viewing.add2 %}<p style="margin-bottom: 5px;">{{ viewing.add2 }}</p>{% endif %}
+            <p style="margin-bottom: 5px;">{{ viewing.city }}</p>
+            <p style="margin-bottom: 5px;">{{ viewing.county }}</p>
+            <p style="margin-bottom: 5px;">{{ viewing.postcode }}</p>
 
-					<h2>Additional Information</h2>
-					<p style="margin-bottom: 5px;"><strong>Property Code:</strong> {{ viewing.payload.code }}</p>
-					<p style="margin-bottom: 5px;"><strong>Availability:</strong> {{ viewing.payload.availability }}</p>
-					{% if viewing.payload.valuation %}
-					<p style="margin-bottom: 5px;"><strong>Valuation Requested:</strong> Yes</p>
-					{% endif %}
-				</div>
+            <h2>Additional Information</h2>
+            <p style="margin-bottom: 5px;"><strong>Property Code:</strong> {{ viewing.code }}</p>
+            <p style="margin-bottom: 5px;"><strong>Availability:</strong></p>
+            {% for slot in viewing.availability %}
+            <p style="margin-bottom: 5px;">{{ slot.date }} from {{ slot.from }} to {{ slot.to }}</p>
+            {% endfor %}
+            {% if viewing.valuation %}
+            <p style="margin-bottom: 5px;"><strong>Valuation Requested:</strong> Yes</p>
+            {% endif %}
+        </div>
 
-				<p>You can respond to this request by replying directly to this email.</p>
-			</div>
+        <p>You can respond to this request by replying directly to this email.</p>
+      </div>
 
 			<hr class="divider" />
 			<div class="footer">
