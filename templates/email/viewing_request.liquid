@@ -84,7 +84,7 @@
 			<div class="title">New Viewing Request</div>
 
 			<div class="message">
-        <p>Hello, a new viewing request has been received:</p>
+        <p>Hello, a new viewing request has been received for property: {{ viewing.code }}:</p>
 
         <div style="background-color: #f6f6f6; padding: 20px; border-radius: 6px; margin: 20px 0;">
             <h2 style="margin-top: 0;">Contact Details</h2>
@@ -105,7 +105,7 @@
             <p style="margin-bottom: 5px;">{{ viewing.postcode }}</p>
 
             <h2>Additional Information</h2>
-            <p style="margin-bottom: 5px;"><strong>Property Link:</strong> <a href="{{ projectUrl }}/buy/{{ viewing.code }}">View Property</a></p>
+            <p style="margin-bottom: 5px;"><strong>Property Link:</strong> <a href="{{ projectUrl }}buy/{{ viewing.code }}">View Property</a></p>
             <p style="margin-bottom: 5px;"><strong>Availability:</strong></p>
             {% for slot in viewing.availability %}
             <p style="margin-bottom: 5px;">{{ slot.date }} from {{ slot.from }} to {{ slot.to }}</p>
