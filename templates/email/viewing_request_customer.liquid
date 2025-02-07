@@ -80,8 +80,8 @@
 			{% endif %}
 			
 			{% if property.featuredImageUrl %}
-			<img src="{{ property.featuredImageUrl }}" alt="Property Image" class="property-image"/>
-			{% endif %}
+        <img src="{{ property.featuredImageUrl }}" alt="Property Image" class="property-image"/>
+      {% endif %}
 
 			<div class="title">Thank you! We will confirm your appointment shortly.</div>
 
@@ -92,12 +92,14 @@
 
 				<p>You requested to view the property at:</p>
 				<p style="font-weight: 600;">
-					{{ property.address.line1 }}<br/>
-					{% if property.address.line1 %}{{ property.address.line1 }}<br/>{% endif %}
-          {% if property.address.line2 %}{{ property.address.line2 }}<br/>{% endif %}
-          {% if property.address.line3 %}{{ property.address.line3 }}<br/>{% endif %}
-          {% if property.address.line4 %}{{ property.address.line4 }}<br/>{% endif %}
-					{{ property.address.city }}<br/>
+					{% if property.address %}
+            <p style="font-weight: 600;">
+                {{ property.address.line1 }}<br/>
+                {% if property.address.line2 %}{{ property.address.line2 }}<br/>{% endif %}
+                {% if property.address.line3 %}{{ property.address.line3 }}<br/>{% endif %}
+                {% if property.address.line4 %}{{ property.address.line4 }}<br/>{% endif %}
+            </p>
+            {% endif %}
 				</p>
 
 				<div style="background-color: #f6f6f6; padding: 20px; border-radius: 6px; margin: 20px 0;">
@@ -126,7 +128,7 @@
 
 			<hr class="divider" />
 			<div class="footer">
-				{{ projectName }}
+				{{ projectName }} Estate Agents
 			</div>
 		</div>
 	</body>
