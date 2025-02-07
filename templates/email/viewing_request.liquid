@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>{{ projectName }}</title>
+		<style>
+			body {
+				text-align: center;
+				color: #2e3141;
+				font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu',
+					'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+				padding: 0;
+				margin: 0;
+			}
+			.content {
+				text-align: left;
+				background-color: #fff;
+				border-radius: 6px;
+				margin: 40px auto;
+				max-width: 500px;
+				padding: 60px;
+			}
+			.logo {
+				margin-bottom: 40px;
+			}
+			.logo img {
+				height: 40px;
+			}
+			.title {
+				font-size: 24px;
+				font-weight: 600;
+				margin: 20px 0;
+			}
+			.message {
+				font-size: 16px;
+				margin: 20px 0;
+			}
+			.button {
+				display: inline-block;
+				text-decoration: none;
+				border-radius: 6px;
+				padding: 13px 40px;
+				margin: 20px 0;
+				font-weight: 600;
+			}
+			.button.primary {
+				color: #fff;
+				background-color: #6644ff;
+			}
+			.footer {
+				color: #a0a3b1;
+				font-size: 14px;
+				margin: 20px 0;
+			}
+			.link {
+				color: #6644ff;
+				text-decoration: none;
+			}
+			.divider {
+				margin: 40px 0;
+				border: 0;
+				border-top: 1px solid #e1e2e5;
+			}
+			.text-muted {
+				color: #a0a3b1;
+			}
+			@media screen and (max-width: 500px) {
+				.content {
+					margin: 0;
+					padding: 40px 20px;
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<div class="content">
+			{% if projectLogo %}
+			<div class="logo">
+				<img src="{{ projectLogo }}" alt="{{ projectName }}" />
+			</div>
+			{% endif %}
+			
+			<div class="title">New Viewing Request</div>
+
+			<div class="message">
+				<p>Hello, a new viewing request has been received:</p>
+
+				<div style="background-color: #f6f6f6; padding: 20px; border-radius: 6px; margin: 20px 0;">
+					<h2 style="margin-top: 0;">Contact Details</h2>
+					<ul style="list-style: none; padding: 0; margin: 0;">
+						<li style="margin-bottom: 10px;"><strong>Name:</strong> {{ viewing.name }}</li>
+						<li style="margin-bottom: 10px;"><strong>Email:</strong> {{ viewing.email }}</li>
+						<li style="margin-bottom: 10px;"><strong>Mobile:</strong> {{ viewing.mobile }}</li>
+						{% if viewing.landline %}
+						<li style="margin-bottom: 10px;"><strong>Landline:</strong> {{ viewing.landline }}</li>
+						{% endif %}
+					</ul>
+
+					<h2>Property Address</h2>
+					<p style="margin-bottom: 5px;">{{ viewing.add1 }}</p>
+					{% if viewing.add2 %}<p style="margin-bottom: 5px;">{{ viewing.add2 }}</p>{% endif %}
+					<p style="margin-bottom: 5px;">{{ viewing.city }}</p>
+					<p style="margin-bottom: 5px;">{{ viewing.county }}</p>
+					<p style="margin-bottom: 5px;">{{ viewing.postcode }}</p>
+
+					<h2>Additional Information</h2>
+					<p style="margin-bottom: 5px;"><strong>Property Code:</strong> {{ viewing.code }}</p>
+					<p style="margin-bottom: 5px;"><strong>Availability:</strong> {{ viewing.availability }}</p>
+					{% if viewing.valuation %}
+					<p style="margin-bottom: 5px;"><strong>Valuation Requested:</strong> Yes</p>
+					{% endif %}
+				</div>
+
+				<p>You can respond to this request by replying directly to this email.</p>
+			</div>
+
+			<hr class="divider" />
+			<div class="footer">
+				{{ projectName }}
+			</div>
+		</div>
+	</body>
+</html>
