@@ -83,7 +83,7 @@
 			<img src="{{ property.featuredImageUrl }}" alt="Property Image" class="property-image"/>
 			{% endif %}
 
-			<div class="title">Viewing Request Confirmation</div>
+			<div class="title">Thank you! We will confirm your appointment shortly.</div>
 
 			<div class="message">
 				<p>Dear {{ viewing.name }},</p>
@@ -93,7 +93,10 @@
 				<p>You requested to view the property at:</p>
 				<p style="font-weight: 600;">
 					{{ property.address.line1 }}<br/>
-					{% if property.address.line2 %}{{ property.address.line2 }}<br/>{% endif %}
+					{% if property.address.line1 %}{{ property.address.line1 }}<br/>{% endif %}
+          {% if property.address.line2 %}{{ property.address.line2 }}<br/>{% endif %}
+          {% if property.address.line3 %}{{ property.address.line3 }}<br/>{% endif %}
+          {% if property.address.line4 %}{{ property.address.line4 }}<br/>{% endif %}
 					{{ property.address.city }}<br/>
 				</p>
 
@@ -114,7 +117,7 @@
 
 					{% if viewing.valuation %}
 					<h3>Additional Services:</h3>
-					<p style="margin-bottom: 5px;">You have requested a property valuation. We'll discuss this when we contact you.</p>
+					<p style="margin-bottom: 5px;">We are delighted that you also have requested a property valuation. We'll discuss this further when we contact you.</p>
 					{% endif %}
 				</div>
 
