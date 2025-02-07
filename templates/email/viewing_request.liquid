@@ -76,10 +76,10 @@
 	<body>
 		<div class="content">
 			{% if projectLogo %}
-			<div class="logo">
-				<img src="{{ projectLogo }}" alt="{{ projectName }}" />
-			</div>
-			{% endif %}
+        <div class="logo" style="background-color: #162258; padding: 20px; border-radius: 6px;">
+          <img src="{{ projectLogo }}" alt="{{ projectName }}" style="height: 40px; display: block; margin: 0 auto;"/>
+        </div>
+      {% endif %}
 			
 			<div class="title">New Viewing Request</div>
 
@@ -97,7 +97,7 @@
                 {% endif %}
             </ul>
 
-            <h2>Property Address</h2>
+            <h2>Customer Address</h2>
             <p style="margin-bottom: 5px;">{{ viewing.add1 }}</p>
             {% if viewing.add2 %}<p style="margin-bottom: 5px;">{{ viewing.add2 }}</p>{% endif %}
             <p style="margin-bottom: 5px;">{{ viewing.city }}</p>
@@ -105,7 +105,7 @@
             <p style="margin-bottom: 5px;">{{ viewing.postcode }}</p>
 
             <h2>Additional Information</h2>
-            <p style="margin-bottom: 5px;"><strong>Property Code:</strong> {{ viewing.code }}</p>
+            <p style="margin-bottom: 5px;"><strong>Property Link:</strong> <a href="{{ projectUrl }}/buy/{{ viewing.code }}">View Property</a></p>
             <p style="margin-bottom: 5px;"><strong>Availability:</strong></p>
             {% for slot in viewing.availability %}
             <p style="margin-bottom: 5px;">{{ slot.date }} from {{ slot.from }} to {{ slot.to }}</p>
@@ -115,12 +115,12 @@
             {% endif %}
         </div>
 
-        <p>You can respond to this request by replying directly to this email.</p>
+        <p>Please remember to respond to this request as soon as possible.</p>
       </div>
 
 			<hr class="divider" />
 			<div class="footer">
-				{{ projectName }}
+				{{ projectDescriptor }}
 			</div>
 		</div>
 	</body>
