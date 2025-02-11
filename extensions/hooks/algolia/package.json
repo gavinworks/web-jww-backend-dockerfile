@@ -1,9 +1,9 @@
 {
-  "name": "directus-extension-algolia-hook",
+  "name": "directus-extension-algolia",
   "version": "1.0.0",
   "directus:extension": {
     "type": "hook",
-    "path": "index.js",
+    "path": "./index.js",
     "host": "^11.0.0"
   },
   "dependencies": {
