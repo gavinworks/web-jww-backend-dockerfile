@@ -9,9 +9,12 @@ RUN corepack enable \
 COPY --chown=node:node templates/email/viewing_request.liquid /directus/templates/email/
 COPY --chown=node:node templates/email/viewing_request_customer.liquid /directus/templates/email/
 
-# Copy and install extension
+# Copy and install extensions
 COPY --chown=node:node extensions /directus/extensions
 RUN cd /directus/extensions/hooks/directus-extension-algolia \
+    && npm install \
+    && npx @directus/extensions-sdk build \
+    && cd /directus/extensions/endpoints/directus-extension-algolia-reindex \
     && npm install \
     && npx @directus/extensions-sdk build
 
