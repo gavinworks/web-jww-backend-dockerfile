@@ -1,5 +1,6 @@
 import algoliasearch from "algoliasearch";
 export default ({ action, services, exceptions }) => {
+  console.log("Algolia extension is loading...");
   const { ItemsService } = services;
   const { ServiceUnavailableException } = exceptions;
 
@@ -40,7 +41,21 @@ export default ({ action, services, exceptions }) => {
 
   // Add a custom endpoint for reindexing
   action("routes.custom.after", ({ router }) => {
+    router.get("/debug/routes", (req, res) => {
+      const routes = router.stack
+        .filter((r) => r.route)
+        .map((r) => ({
+          path: r.route.path,
+          methods: Object.keys(r.route.methods),
+        }));
+      res.json(routes);
+      console.log(routes);
+    });
+
+    console.log("Registering Algolia routes...");
+
     router.post("/algolia/reindex", async (req, res) => {
+      console.log("Algolia reindex endpoint called");
       try {
         const CHUNK_SIZE = 100;
         const propertiesService = new ItemsService("properties", {
