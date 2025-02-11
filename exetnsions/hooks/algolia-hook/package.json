@@ -1,0 +1,7 @@
+{
+  "name": "directus-extension-algolia-hook",
+  "version": "1.0.0",
+  "dependencies": {
+    "algoliasearch": "^4.x.x"
+  }
+}
