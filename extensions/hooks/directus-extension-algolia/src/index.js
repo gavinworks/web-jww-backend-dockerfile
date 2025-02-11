@@ -1,7 +1,7 @@
+import algoliasearch from "algoliasearch";
 export default ({ action, services, exceptions }) => {
   const { ItemsService } = services;
   const { ServiceUnavailableException } = exceptions;
-  const algoliasearch = require("algoliasearch");
 
   // Initialize the Algolia client
   const client = algoliasearch(process.env.ALGOLIA_APP_ID, process.env.ALGOLIA_ADMIN_API_KEY);
