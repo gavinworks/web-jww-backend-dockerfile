@@ -5,8 +5,9 @@ USER root
 RUN corepack enable \
     && corepack prepare pnpm@8.7.6 --activate \
     && chown node:node /directus \
-    # Install algoliasearch using pnpm
-    && pnpm add algoliasearch
+    # Install algoliasearch using npm
+    && cd /directus \
+    && npm install algoliasearch
 
 # Copy email templates
 COPY --chown=node:node templates/email/viewing_request.liquid /directus/templates/email/
