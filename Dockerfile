@@ -11,7 +11,9 @@ COPY --chown=node:node templates/email/viewing_request_customer.liquid /directus
 
 # Copy and install extension
 COPY --chown=node:node extensions /directus/extensions
-RUN cd /directus/extensions/hooks/algolia && npm install
+RUN cd /directus/extensions/hooks/directus-extension-algolia \
+    && npm install \
+    && npm run build
 
 EXPOSE 8055
 USER node
