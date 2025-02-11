@@ -7,7 +7,7 @@ RUN corepack enable \
     && chown node:node /directus \
     # Install algoliasearch using npm
     && cd /directus \
-    && npm install algoliasearch
+    && npm install algoliasearch --save
 
 # Copy email templates
 COPY --chown=node:node templates/email/viewing_request.liquid /directus/templates/email/
