@@ -24,7 +24,7 @@
     "link": "directus-extension link"
   },
   "devDependencies": {
-    "@directus/extensions-sdk": "11.0.1"
+    "@directus/extensions-sdk": "13.0.1"
   },
   "dependencies": {
     "algoliasearch": "^4.x.x"
