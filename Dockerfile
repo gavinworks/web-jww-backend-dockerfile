@@ -9,10 +9,14 @@ RUN corepack enable \
 COPY --chown=node:node templates/email/viewing_request.liquid /directus/templates/email/
 COPY --chown=node:node templates/email/viewing_request_customer.liquid /directus/templates/email/
 
-# Copy and install extension
+# Copy extensions
 COPY --chown=node:node extensions /directus/extensions
-RUN cd /directus/extensions/hooks/algolia-hook \
-    && npm install
+
+# Install extension dependencies
+RUN cd /directus/extensions/hooks/algolia \
+    && npm install \
+    && cd /directus \
+    && npm install /directus/extensions/hooks/algolia
 
 EXPOSE 8055
 USER node
