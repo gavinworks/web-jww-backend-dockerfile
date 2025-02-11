@@ -1,7 +1,10 @@
 # syntax=docker/dockerfile:1.4
 FROM directus/directus:11.4.1
 USER root
-RUN corepack enable \
+
+# Install Node 22
+RUN apk add --no-cache nodejs=22.13.1-r0 npm \
+    && corepack enable \
     && corepack prepare pnpm@8.7.6 --activate \
     && chown node:node /directus
 
