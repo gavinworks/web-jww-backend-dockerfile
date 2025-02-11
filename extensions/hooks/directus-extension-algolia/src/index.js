@@ -42,10 +42,9 @@ export default ({ action, services, exceptions }) => {
   action("routes.custom.after", ({ router }) => {
     router.post("/algolia/reindex", async (req, res) => {
       try {
-        const CHUNK_SIZE = 100; // Adjust this based on your needs
+        const CHUNK_SIZE = 100;
         const propertiesService = new ItemsService("properties", {
           schema: req.schema,
-          accountability: req.accountability,
         });
 
         // First, clear the index
@@ -102,7 +101,6 @@ export default ({ action, services, exceptions }) => {
     try {
       const propertiesService = new ItemsService("properties", {
         schema: req.schema,
-        accountability: req.accountability,
       });
 
       const property = await propertiesService.readOne(key);
