@@ -2,47 +2,8 @@ import algoliasearch from "algoliasearch";
 
 export default {
   id: "algolia",
-  handler: (router, { services, exceptions }) => {
-    const { ItemsService } = services;
-    const { ServiceUnavailableException } = exceptions;
-    const client = algoliasearch(process.env.ALGOLIA_APP_ID, process.env.ALGOLIA_ADMIN_API_KEY);
-    const index = client.initIndex(process.env.ALGOLIA_INDEX_NAME);
-
-    const transformPropertyForAlgolia = (property) => {
-      const officeIdsArray = typeof property.officeIds === "string" ? JSON.parse(property.officeIds) : property.officeIds;
-
-      return {
-        objectID: property.code,
-        code: property.code,
-        image: property.featuredImageUrl,
-        imagecount: property.images?.length || 0,
-        address2: property.address?.line2,
-        address3: property.address?.line3,
-        postcode: property.address?.postcode,
-        _geoloc: property.address?.geolocation
-          ? {
-              lat: property.address.geolocation.latitude,
-              lng: property.address.geolocation.longitude,
-            }
-          : null,
-        bedrooms: property.bedrooms,
-        receptions: property.receptions,
-        bathrooms: property.bathrooms,
-        videourl: property.video2Url,
-        type: Array.isArray(property.type) ? property.type.toString() : property.type,
-        sellingprice: property.selling?.price,
-        lettingprice: property.letting?.rent,
-        qualifier: property.selling?.qualifier ? property.selling.qualifier.replace(/([A-Z])/g, " $1").trim() : null,
-        officeid: officeIdsArray?.[0] || null,
-        mode: property.marketingMode,
-      };
-    };
-
-    // Try both GET and POST to debug
-    router.get("/", async (req, res) => {
-      res.send("Algolia endpoint is working");
-    });
-
+  handler: (router) => {
+    router.get("/", (req, res) => res.send("Algolia endpoint is working"));
     router.get("/reindex", async (req, res) => {
       if (req.accountability?.user == null) {
         res.status(403);
@@ -60,6 +21,8 @@ export default {
 
         // Clear the index first
         status.steps.push("Clearing existing index");
+        const client = algoliasearch(process.env.ALGOLIA_APP_ID, process.env.ALGOLIA_ADMIN_API_KEY);
+        const index = client.initIndex(process.env.ALGOLIA_INDEX_NAME);
         await index.clearObjects();
         status.steps.push("Index cleared successfully");
 
@@ -96,8 +59,6 @@ export default {
         throw new ServiceUnavailableException(error.message || "Failed to update Algolia index");
       }
     });
-
-    // Keep the POST endpoint too
     router.post("/reindex", async (req, res) => {
       if (req.accountability?.user == null) {
         res.status(403);
@@ -115,6 +76,8 @@ export default {
 
         // Clear the index first
         status.steps.push("Clearing existing index");
+        const client = algoliasearch(process.env.ALGOLIA_APP_ID, process.env.ALGOLIA_ADMIN_API_KEY);
+        const index = client.initIndex(process.env.ALGOLIA_INDEX_NAME);
         await index.clearObjects();
         status.steps.push("Index cleared successfully");
 
