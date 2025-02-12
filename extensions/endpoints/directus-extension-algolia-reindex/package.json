@@ -16,7 +16,7 @@
     "type": "endpoint",
     "path": "dist/index.js",
     "source": "src/index.js",
-    "host": "^11.0.0"
+    "host": "^10.1.11"
   },
   "scripts": {
     "build": "directus-extension build",
