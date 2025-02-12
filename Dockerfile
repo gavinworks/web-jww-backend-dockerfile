@@ -9,14 +9,21 @@ RUN corepack enable \
 COPY --chown=node:node templates/email/viewing_request.liquid /directus/templates/email/
 COPY --chown=node:node templates/email/viewing_request_customer.liquid /directus/templates/email/
 
-# Copy and install extensions
+# Create extensions directory and set permissions
+RUN mkdir -p /directus/extensions && chown node:node /directus/extensions
+
+# Copy extensions (including pre-built dist folders)
 COPY --chown=node:node extensions /directus/extensions
+
+# Ensure correct permissions recursively
+RUN chmod -R 755 /directus/extensions \
+    && chown -R node:node /directus/extensions
+
+# Install production dependencies only
 RUN cd /directus/extensions/hooks/directus-extension-algolia \
-    && npm install \
-    && npx @directus/extensions-sdk build \
+    && npm ci --omit=dev \
     && cd /directus/extensions/endpoints/directus-extension-algolia-reindex \
-    && npm install \
-    && npx @directus/extensions-sdk build
+    && npm ci --omit=dev
 
 EXPOSE 8055
 USER node
