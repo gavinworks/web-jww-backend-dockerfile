@@ -1,5 +1,5 @@
 {
-  "name": "directus-extension-alogolia-reindex",
+  "name": "directus-extension-algolia-reindex",
   "description": "Algolia reindex endpoint",
   "icon": "extension",
   "version": "1.0.0",
