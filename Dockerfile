@@ -13,16 +13,19 @@ COPY --chown=node:node templates/email/viewing_request_customer.liquid /directus
 RUN mkdir -p /directus/extensions && chown node:node /directus/extensions
 
 # Copy extensions (including pre-built dist folders)
-COPY --chown=node:node extensions /directus/extensions
+COPY --chown=node:node extensions/directus-extension-algolia-reindex /directus/extensions/directus-extension-algolia-reindex
+COPY --chown=node:node extensions/directus-extension-algolia /directus/extensions/directus-extension-algolia
 
-# Ensure correct permissions recursively
-RUN chmod -R 755 /directus/extensions \
-    && chown -R node:node /directus/extensions
+# Ensure correct permissions for the extensions
+RUN chmod -R 755 /directus/extensions/directus-extension-algolia-reindex \
+    && chmod -R 755 /directus/extensions/directus-extension-algolia \
+    && chown -R node:node /directus/extensions/directus-extension-algolia-reindex \
+    && chown -R node:node /directus/extensions/directus-extension-algolia
 
 # Install production dependencies only
-RUN cd /directus/extensions/hooks/directus-extension-algolia \
+RUN cd /directus/extensions/directus-extension-algolia-reindex \
     && npm ci --omit=dev \
-    && cd /directus/extensions/endpoints/directus-extension-algolia-reindex \
+    && cd /directus/extensions/directus-extension-algolia \
     && npm ci --omit=dev
 
 EXPOSE 8055
