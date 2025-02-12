@@ -50,9 +50,9 @@ export default {
         res.send("Algolia reindex endpoint is working");
       });
 
-      // Reindex route
-      router.get("/reindex", async (req, res) => {
-        console.log("GET /reindex route hit");
+      // Reindex route - POST only
+      router.post("/reindex", async (req, res) => {
+        console.log("POST /reindex route hit");
 
         if (req.accountability?.user == null) {
           console.log("Unauthorized access attempt");
