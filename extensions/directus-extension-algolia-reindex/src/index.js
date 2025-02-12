@@ -2,7 +2,7 @@ import algoliasearch from "algoliasearch";
 
 export default {
   id: "algolia",
-  handler: ({ services, exceptions }) => {
+  handler: (router, { services, exceptions }) => {
     const { ItemsService } = services;
     const { ServiceUnavailableException } = exceptions;
     const client = algoliasearch(process.env.ALGOLIA_APP_ID, process.env.ALGOLIA_ADMIN_API_KEY);
@@ -38,57 +38,59 @@ export default {
       };
     };
 
-    return {
-      handler: (router) => {
-        router.post("/algolia/reindex", async (req, res) => {
-          try {
-            const status = {
-              steps: [],
-              totalProcessed: 0,
-              success: true,
-            };
+    // Register the route directly on the router
+    router.post("/reindex", async (req, res) => {
+      if (req.accountability?.user == null) {
+        res.status(403);
+        return res.send(`You don't have permission to access this.`);
+      }
 
-            status.steps.push("Starting reindex process");
+      try {
+        const status = {
+          steps: [],
+          totalProcessed: 0,
+          success: true,
+        };
 
-            // Clear the index first
-            status.steps.push("Clearing existing index");
-            await index.clearObjects();
-            status.steps.push("Index cleared successfully");
+        status.steps.push("Starting reindex process");
 
-            const CHUNK_SIZE = 100;
-            const propertiesService = new ItemsService("properties", {
-              schema: req.schema,
-            });
+        // Clear the index first
+        status.steps.push("Clearing existing index");
+        await index.clearObjects();
+        status.steps.push("Index cleared successfully");
 
-            let page = 0;
-            let hasMore = true;
-
-            while (hasMore) {
-              const properties = await propertiesService.readByQuery({
-                limit: CHUNK_SIZE,
-                offset: page * CHUNK_SIZE,
-              });
-
-              if (properties.length === 0) {
-                hasMore = false;
-                continue;
-              }
-
-              const transformedProperties = properties.map(transformPropertyForAlgolia);
-              await index.saveObjects(transformedProperties);
-
-              status.totalProcessed += properties.length;
-              page++;
-              status.steps.push(`Processed batch ${page} (${status.totalProcessed} total properties)`);
-            }
-
-            status.steps.push("Reindex completed successfully");
-            res.json(status);
-          } catch (error) {
-            throw new ServiceUnavailableException(error.message || "Failed to update Algolia index");
-          }
+        const CHUNK_SIZE = 100;
+        const propertiesService = new ItemsService("properties", {
+          schema: req.schema,
         });
-      },
-    };
+
+        let page = 0;
+        let hasMore = true;
+
+        while (hasMore) {
+          const properties = await propertiesService.readByQuery({
+            limit: CHUNK_SIZE,
+            offset: page * CHUNK_SIZE,
+          });
+
+          if (properties.length === 0) {
+            hasMore = false;
+            continue;
+          }
+
+          const transformedProperties = properties.map(transformPropertyForAlgolia);
+          await index.saveObjects(transformedProperties);
+
+          status.totalProcessed += properties.length;
+          page++;
+          status.steps.push(`Processed batch ${page} (${status.totalProcessed} total properties)`);
+        }
+
+        status.steps.push("Reindex completed successfully");
+        res.json(status);
+      } catch (error) {
+        throw new ServiceUnavailableException(error.message || "Failed to update Algolia index");
+      }
+    });
   },
 };
