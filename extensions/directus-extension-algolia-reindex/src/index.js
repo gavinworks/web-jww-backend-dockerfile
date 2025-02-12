@@ -56,25 +56,20 @@ export default {
 
         if (req.accountability?.user == null) {
           console.log("Unauthorized access attempt");
-          res.status(403);
-          return res.send(`You don't have permission to access this.`);
+          return res.json({
+            message: "Unauthorized access attempt",
+            success: false,
+          });
         }
 
         try {
-          const status = {
-            steps: [],
-            totalProcessed: 0,
-            success: true,
-          };
-
-          console.log("Starting reindex process");
-          status.steps.push("Starting reindex process");
+          let totalProcessed = 0;
+          let lastStep = "";
 
           // Clear the index first
           console.log("Clearing existing index");
-          status.steps.push("Clearing existing index");
           await index.clearObjects();
-          status.steps.push("Index cleared successfully");
+          lastStep = "Index cleared";
 
           const CHUNK_SIZE = 100;
           const propertiesService = new ItemsService("properties", {
@@ -92,26 +87,34 @@ export default {
             });
 
             if (properties.length === 0) {
-              console.log("No more properties to process");
               hasMore = false;
               continue;
             }
 
-            console.log(`Found ${properties.length} properties`);
             const transformedProperties = properties.map(transformPropertyForAlgolia);
             await index.saveObjects(transformedProperties);
 
-            status.totalProcessed += properties.length;
+            totalProcessed += properties.length;
             page++;
-            status.steps.push(`Processed batch ${page} (${status.totalProcessed} total properties)`);
+            lastStep = `Processed ${totalProcessed} properties`;
           }
 
           console.log("Reindex completed successfully");
-          status.steps.push("Reindex completed successfully");
-          res.json(status);
+
+          // Simplified response format
+          return res.json({
+            message: `Reindex completed successfully. Processed ${totalProcessed} properties.`,
+            success: true,
+            total: totalProcessed,
+            lastStep,
+          });
         } catch (error) {
           console.error("Reindex error:", error);
-          throw new Error(error.message || "Failed to update Algolia index");
+          return res.json({
+            message: error.message || "Failed to update Algolia index",
+            success: false,
+            error: true,
+          });
         }
       });
 
