@@ -17,6 +17,21 @@ export default {
         console.log("Transforming property:", property.code);
         const officeIdsArray = typeof property.officeIds === "string" ? JSON.parse(property.officeIds) : property.officeIds;
 
+        // Office ID to parent name mapping
+        const officeToParent = {
+          DUR: "Durham",
+          BAO: "Bishop Auckland",
+          CLS: "Chester-le-Street",
+          CNS: "Consett",
+          DAR: "Darlington",
+        };
+
+        // Find the first matching parent name
+        const parent = officeIdsArray?.find((id) => officeToParent[id]) ? officeToParent[officeIdsArray.find((id) => officeToParent[id])] : null;
+
+        // Only combine if both parent and area exist
+        const area = parent && property.area?.name ? `${parent} - ${property.area.name}` : property.area?.name || null;
+
         return {
           objectID: property.code,
           code: property.code,
@@ -42,6 +57,8 @@ export default {
           mode: property.marketingMode,
           sellingstatus: property.selling?.status || null,
           lettingstatus: property.letting?.status || null,
+          parent: parent,
+          area: area,
         };
       };
 
@@ -51,7 +68,7 @@ export default {
         res.send("Algolia reindex endpoint is working");
       });
 
-      // Reindex route - POST only
+      // Reindex route
       router.post("/reindex", async (req, res) => {
         console.log("POST /reindex route hit");
 
@@ -102,7 +119,6 @@ export default {
 
           console.log("Reindex completed successfully");
 
-          // Simplified response format
           return res.json({
             message: `Reindex completed successfully. Processed ${totalProcessed} properties.`,
             success: true,
