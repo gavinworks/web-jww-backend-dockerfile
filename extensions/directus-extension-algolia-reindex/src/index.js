@@ -40,6 +40,8 @@ export default {
           qualifier: property.selling?.qualifier ? property.selling.qualifier.replace(/([A-Z])/g, " $1").trim() : null,
           officeid: officeIdsArray?.[0] || null,
           mode: property.marketingMode,
+          sellingstatus: property.selling?.status || null,
+          lettingstatus: property.letting?.status || null,
         };
       };
 
