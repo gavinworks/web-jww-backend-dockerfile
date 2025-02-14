@@ -101,6 +101,36 @@ export default {
         };
       };
 
+      // Configure replica index
+      const configureReplicaIndex = async () => {
+        console.log("Configuring replica index for locations...");
+
+        try {
+          // Set up the replica
+          await index.setSettings({
+            replicas: [`${process.env.ALGOLIA_INDEX_NAME}_locations`],
+          });
+
+          // Get the replica index
+          const locationIndex = client.initIndex(`${process.env.ALGOLIA_INDEX_NAME}_locations`);
+
+          // Configure the replica index
+          await locationIndex.setSettings({
+            searchableAttributes: ["parent", "area"],
+            attributesToRetrieve: ["parent", "area"],
+            distinct: true,
+            customRanking: ["asc(parent)", "asc(area)"],
+            attributesForFaceting: ["parent", "area"],
+          });
+
+          console.log("Replica index configured successfully");
+          return true;
+        } catch (error) {
+          console.error("Error configuring replica index:", error);
+          throw error;
+        }
+      };
+
       // Test route
       router.get("/", (req, res) => {
         console.log("GET / route hit");
@@ -156,10 +186,15 @@ export default {
             lastStep = `Processed ${totalProcessed} properties`;
           }
 
-          console.log("Reindex completed successfully");
+          // Configure replica index after main reindex
+          console.log("Configuring location replica index...");
+          await configureReplicaIndex();
+          lastStep = `Processed ${totalProcessed} properties and configured location replica`;
+
+          console.log("Reindex and replica configuration completed successfully");
 
           return res.json({
-            message: `Reindex completed successfully. Processed ${totalProcessed} properties.`,
+            message: `Reindex completed successfully. Processed ${totalProcessed} properties and configured location replica.`,
             success: true,
             total: totalProcessed,
             lastStep,
@@ -167,7 +202,7 @@ export default {
         } catch (error) {
           console.error("Reindex error:", error);
           return res.json({
-            message: error.message || "Failed to update Algolia index",
+            message: error.message || "Failed to update Algolia indexes",
             success: false,
             error: true,
           });
