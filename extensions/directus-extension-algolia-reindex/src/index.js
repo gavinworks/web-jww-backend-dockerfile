@@ -13,12 +13,39 @@ export default {
       const index = client.initIndex(process.env.ALGOLIA_INDEX_NAME);
       console.log("Algolia client initialized with index:", process.env.ALGOLIA_INDEX_NAME);
 
+      const formatAreaName = (areaName) => {
+        if (!areaName) return null;
+
+        // Split into words, convert to title case
+        return areaName
+          .toLowerCase()
+          .split(" ")
+          .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+          .join(" ");
+      };
+
       const transformPropertyForAlgolia = (property) => {
         console.log("Transforming property:", property.code);
-        const officeIdsArray = typeof property.officeIds === "string" ? JSON.parse(property.officeIds) : property.officeIds;
+
+        // Parse offices JSON if it's a string
+        let officesArray;
+        try {
+          officesArray = typeof property.offices === "string" ? JSON.parse(property.offices) : property.offices;
+        } catch (error) {
+          console.error("Error parsing offices for property:", property.code, error);
+          officesArray = [];
+        }
+
+        // Get the first office ID
+        const officeId = officesArray?.[0]?.id || null;
 
         // Office ID to parent name mapping
         const officeToParent = {
+          DAL: "Darlington",
+          CNL: "Consett",
+          CLL: "Chester Le Street",
+          BAL: "Bishop Auckland",
+          LET: "Durham",
           DUR: "Durham",
           BAO: "Bishop Auckland",
           CLS: "Chester-le-Street",
@@ -26,11 +53,8 @@ export default {
           DAR: "Darlington",
         };
 
-        // Find the first matching parent name
-        const parent = officeIdsArray?.find((id) => officeToParent[id]) ? officeToParent[officeIdsArray.find((id) => officeToParent[id])] : null;
-
-        // Only combine if both parent and area exist
-        const area = parent && property.area?.name ? `${parent} - ${property.area.name}` : property.area?.name || null;
+        // Get parent name, return null for 'DUS' or unknown IDs
+        const parent = officeId === "DUS" ? null : officeToParent[officeId] || null;
 
         return {
           objectID: property.code,
@@ -53,12 +77,12 @@ export default {
           type: Array.isArray(property.type) ? property.type.toString() : property.type,
           price: property.selling?.price || property.letting?.rent || null,
           qualifier: property.selling?.qualifier ? property.selling.qualifier.replace(/([A-Z])/g, " $1").trim() : null,
-          officeid: officeIdsArray?.[0] || null,
+          officeid: officeId,
           mode: property.marketingMode,
           sellingstatus: property.selling?.status || null,
           lettingstatus: property.letting?.status || null,
           parent: parent,
-          area: area,
+          area: formatAreaName(property.area?.name), // Format area name
         };
       };
 
