@@ -118,6 +118,7 @@ export default {
           await locationIndex.setSettings({
             searchableAttributes: ["parent", "area"],
             attributesToRetrieve: ["parent", "area"],
+            attributeForDistinct: "area", // Set area as the attribute for distinct
             distinct: true,
             customRanking: ["asc(parent)", "asc(area)"],
             attributesForFaceting: ["parent", "area"],
