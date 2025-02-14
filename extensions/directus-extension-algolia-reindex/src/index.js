@@ -16,20 +16,20 @@ export default {
       const formatAreaName = (areaName) => {
         if (!areaName) return null;
 
-        // Special case mappings
+        // Special case mappings with exact matches
         const specialCases = {
-          "Central/north/east": "Central, North, East",
-          "Durham Moor /fram/pity Me": "Durham Moor, Fram, Pity Me",
-          "Broompark /ushaw Moor": "Broompark, Ushaw Moor",
-          "Farewell Hall/merryoaks": "Farewell Hall, Merryoaks",
+          "Central/North/East": "Central, North, East",
+          "Durham Moor /Fram/Pity me": "Durham Moor, Fram, Pity Me",
+          "Broompark /Ushaw Moor": "Broompark, Ushaw Moor",
+          "Farewell Hall/Merryoaks": "Farewell Hall, Merryoaks",
         };
 
-        // Check if it's a special case
+        // Check for special cases first and return immediately if found
         if (specialCases[areaName]) {
           return specialCases[areaName];
         }
 
-        // Regular title case formatting for non-special cases
+        // Only reach this code if it's not a special case
         return areaName
           .toLowerCase()
           .split(" ")
