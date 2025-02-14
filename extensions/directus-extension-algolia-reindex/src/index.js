@@ -16,7 +16,20 @@ export default {
       const formatAreaName = (areaName) => {
         if (!areaName) return null;
 
-        // Split into words, convert to title case
+        // Special case mappings
+        const specialCases = {
+          "Central/north/east": "Central, North, East",
+          "Durham Moor /fram/pity Me": "Durham Moor, Fram, Pity Me",
+          "Broompark /ushaw Moor": "Broompark, Ushaw Moor",
+          "Farewell Hall/merryoaks": "Farewell Hall, Merryoaks",
+        };
+
+        // Check if it's a special case
+        if (specialCases[areaName]) {
+          return specialCases[areaName];
+        }
+
+        // Regular title case formatting for non-special cases
         return areaName
           .toLowerCase()
           .split(" ")
@@ -82,7 +95,7 @@ export default {
           sellingstatus: property.selling?.status || null,
           lettingstatus: property.letting?.status || null,
           parent: parent,
-          area: formatAreaName(property.area?.name), // Format area name
+          area: formatAreaName(property.area?.name), // Format area name with special cases
         };
       };
 
