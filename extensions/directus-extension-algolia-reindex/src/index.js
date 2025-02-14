@@ -22,6 +22,8 @@ export default {
           "Durham Moor /Fram/Pity me": "Durham Moor, Fram, Pity Me",
           "Broompark /Ushaw Moor": "Broompark, Ushaw Moor",
           "Farewell Hall/Merryoaks": "Farewell Hall, Merryoaks",
+          "Newton Hall/Brasside": "Newton Hall, Brasside",
+          "Croxdale/Tudhoe": "Croxdale, Tudhoe",
         };
 
         // Check for special cases first and return immediately if found
@@ -56,7 +58,7 @@ export default {
         const officeToParent = {
           DAL: "Darlington",
           CNL: "Consett",
-          CLL: "Chester Le Street",
+          CLL: "Chester-le-Street",
           BAL: "Bishop Auckland",
           LET: "Durham",
           DUR: "Durham",
