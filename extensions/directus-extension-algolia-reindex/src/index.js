@@ -66,10 +66,11 @@ export default {
           CLS: "Chester-le-Street",
           CNS: "Consett",
           DAR: "Darlington",
+          DUS: "Durham",
         };
 
-        // Get parent name, return null for 'DUS' or unknown IDs
-        const parent = officeId === "DUS" ? null : officeToParent[officeId] || null;
+        // Get parent name from mapping or null for unknown IDs
+        const parent = officeToParent[officeId] || null;
 
         return {
           objectID: property.code,
