@@ -120,6 +120,8 @@ export default {
             attributesToRetrieve: ["parent", "area"],
             customRanking: ["asc(parent)", "asc(area)"],
             attributesForFaceting: ["parent", "area"],
+            attributeForDistinct: "area",
+            distinct: false,
           });
 
           console.log("Replica index configured successfully");
