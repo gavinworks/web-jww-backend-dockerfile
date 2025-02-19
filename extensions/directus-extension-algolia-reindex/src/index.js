@@ -90,7 +90,7 @@ export default {
           receptions: property.receptions,
           bathrooms: property.bathrooms,
           videourl: property.video2Url,
-          type: Array.isArray(property.type) ? property.type.toString() : property.type,
+          type: property.type,
           price: property.selling?.price || property.letting?.rent || null,
           qualifier: property.selling?.qualifier ? property.selling.qualifier.replace(/([A-Z])/g, " $1").trim() : null,
           officeid: officeId,
