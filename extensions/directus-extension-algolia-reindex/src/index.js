@@ -77,6 +77,7 @@ export default {
           code: property.code,
           image: property.featuredImageUrl,
           imagecount: property.images?.length || 0,
+          address1: property.address?.line1,
           address2: property.address?.line2,
           address3: property.address?.line3,
           postcode: property.address?.postcode,
