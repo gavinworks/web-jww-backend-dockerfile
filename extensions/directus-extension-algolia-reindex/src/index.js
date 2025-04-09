@@ -97,7 +97,12 @@ export default {
           parking: property.parking,
           age: property.age,
           price: property.selling?.price || property.letting?.rent || null,
-          qualifier: property.selling?.qualifier ? property.selling.qualifier.replace(/([A-Z])/g, " $1").trim() : null,
+          qualifier: property.selling?.qualifier
+            ? property.selling.qualifier
+                .replace(/([A-Z])/g, " $1")
+                .trim()
+                .replace(/^\w/, (c) => c.toUpperCase())
+            : null,
           officeid: officeId,
           mode: property.marketingMode,
           sellingstatus: property.selling?.status || null,
